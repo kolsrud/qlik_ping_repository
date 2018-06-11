@@ -4,3 +4,4 @@ bin
 packages
 readme.txt
 *~
+*.csproj.user

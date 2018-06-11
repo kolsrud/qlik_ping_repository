@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -11,6 +12,8 @@ namespace PingQRS
 {
 	class Program
 	{
+		private static readonly StreamWriter LogFile = new StreamWriter("Logfile.txt");
+
 		static void Main(string[] args)
 		{
 			ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
@@ -20,7 +23,7 @@ namespace PingQRS
 			}
 
 			var url = args[0];
-			Console.WriteLine("Connecting to " + url);
+			Log("Connecting to " + url);
 			while (true)
 			{
 				using (var client = new RestClient(url))
@@ -30,7 +33,7 @@ namespace PingQRS
 					client.Get("/qrs/about");
 					var d1 = DateTime.Now;
 					var dt = d1 - d0;
-					Console.WriteLine(d1 + " - Connection successfully established. t=" + dt);
+					Log(d1 + " - Connection successfully established. dt=" + dt);
 					Thread.Sleep(5000);
 				}
 			}
@@ -42,5 +45,13 @@ namespace PingQRS
 			Console.WriteLine("Example: PingQRS.exe https://my.server.url");
 			Environment.Exit(1);
 		}
+
+		static void Log(string msg)
+		{
+			LogFile.WriteLine(msg);
+			LogFile.Flush();
+			Console.WriteLine(msg);
+		}
+
 	}
 }
