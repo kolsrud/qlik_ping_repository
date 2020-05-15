@@ -6,7 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using PingQRS.Qlik.Sense.RestClient;
+using Qlik.Sense.RestClient;
 
 namespace PingQRS
 {
@@ -26,16 +26,14 @@ namespace PingQRS
 			Log("Connecting to " + url);
 			while (true)
 			{
-				using (var client = new RestClient(url))
-				{
-					var d0 = DateTime.Now;
-					client.AsNtlmUserViaProxy();
-					client.Get("/qrs/about");
-					var d1 = DateTime.Now;
-					var dt = d1 - d0;
-					Log(d1 + " - Connection successfully established. dt=" + dt);
-					Thread.Sleep(5000);
-				}
+				var client = new RestClient(url);
+				var d0 = DateTime.Now;
+				client.AsNtlmUserViaProxy();
+				client.Get("/qrs/about");
+				var d1 = DateTime.Now;
+				var dt = d1 - d0;
+				Log(d1 + " - Connection successfully established. dt=" + dt);
+				Thread.Sleep(5000);
 			}
 		}
 
